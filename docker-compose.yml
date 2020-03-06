@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+    alpaca-connector:
+        env_file: .env
+        build: .
+        image: birkland/isle-alpaca
+    
+    activemq:
+        image: oapass/activemq:20200219
+        env_file: .env
+        ports:
+          - "8161:8161"
+
+
