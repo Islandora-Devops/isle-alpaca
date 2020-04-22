@@ -3,7 +3,7 @@ FROM openjdk:8-jre
 
 # Karaf environment variables
 ENV KARAF_VERSION=4.0.9 \
-    ALPACA_VERSION=1.0.2 \
+    ALPACA_VERSION=1.0.3 \
     ACTIVEMQ_VERSION=5.15.0 \
     CAMEL_VERSION=2.20.4
 ENV APPS /opt
@@ -18,9 +18,6 @@ RUN apt-get update && apt-get -y install procps && \
     sed -i 's@http://repo1@https://repo1@' ${KARAF_HOME}/etc/org.ops4j.pax.url.mvn.cfg && \
     sed -i 's/osgi:/stdout, osgi:/' ${KARAF_HOME}/etc/org.ops4j.pax.logging.cfg && \
     rm -rf /var/lib/apt/lists/* 
-
-COPY cfg/*.cfg etc/
-COPY cfg/*.xml deploy/
 
 # Install common features and repos
 RUN bin/start && \
@@ -51,6 +48,9 @@ RUN bin/start && \
     bin/client -r 10 -d 5  "feature:install islandora-indexing-triplestore" && \
     bin/stop && \
     rm -rf instances/*
+
+COPY cfg/*.cfg etc/
+COPY cfg/*.xml deploy/
 
 EXPOSE 8101 1099 44444 8181
 CMD ["karaf", "server"]
